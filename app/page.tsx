@@ -1,6 +1,10 @@
 /* 暂时隐藏的文章、计划与联系栏目保存在 git 提交 3bb8b67 的 app/page.tsx 中，需要时可从那里恢复。 */
+import PhotosStrip from "./PhotosStrip";
 import Postcard from "./Postcard";
 import ThemeToggle from "./ThemeToggle";
+import { getPhotosShareUrl, getRecentPhotos } from "./lib/photos";
+
+export const dynamic = "force-dynamic";
 
 // Relay deliberately names no provider.
 const apps = [
@@ -10,7 +14,9 @@ const apps = [
   { name: "Videos", href: "https://v.astroyu.com", domain: "v.astroyu.com", note: "藏所爱", icon: "videos" },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const shareUrl = getPhotosShareUrl();
+  const recentPhotos = await getRecentPhotos(shareUrl, 3);
   return (
     <main className="page overflow-x-clip" id="top">
       <header className="site-header shell mx-auto flex h-[76px] w-[min(1360px,calc(100%-36px))] items-center justify-between sm:h-[84px] sm:w-[min(1360px,calc(100%-88px))]">
@@ -107,6 +113,29 @@ export default function Home() {
           ))}
         </ul>
       </section>
+
+      {recentPhotos.length > 0 && (
+        <section
+          className="photos-section shell mx-auto w-[min(1360px,calc(100%-36px))] pt-[clamp(56px,7vw,92px)] pb-0 sm:w-[min(1360px,calc(100%-88px))]"
+          id="photos"
+          aria-labelledby="photos-title"
+        >
+          <div className="section-heading mb-6 flex items-baseline justify-between gap-4 sm:mb-8">
+            <h2 id="photos-title" className="m-0 font-sans text-[clamp(22px,2.2vw,30px)] leading-tight font-semibold tracking-[-0.03em] text-[var(--ink)]">
+              近影
+            </h2>
+            <a
+              className="text-[13px] font-medium text-[var(--muted)] transition-colors hover:text-[var(--accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
+              href={shareUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              全部照片 →
+            </a>
+          </div>
+          <PhotosStrip photos={recentPhotos} />
+        </section>
+      )}
 
       <footer className="footer shell mx-auto mt-[clamp(64px,8vw,108px)] w-[min(1360px,calc(100%-36px))] border-t border-[var(--line)] pt-7 pb-9 sm:w-[min(1360px,calc(100%-88px))] sm:pt-9 sm:pb-11">
         <div className="footer-main flex items-center justify-between gap-6">

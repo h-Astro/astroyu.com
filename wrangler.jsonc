@@ -18,6 +18,9 @@
   "assets": {
     "binding": "ASSETS"
   },
+  "vars": {
+    "PHOTOS_SHARE_URL": "https://immich.astroyu.com/s/landing"
+  },
   "observability": {
     "enabled": true
   }
