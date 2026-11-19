@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { Card } from "@/components/ui/card";
 import LightboxDialog from "./LightboxDialog";
 import type { PhotoItem } from "./lib/photos";
 
@@ -64,7 +65,7 @@ export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
                   aria-label={`放大查看 ${photo.title ?? photo.meta}`}
                   aria-haspopup="dialog"
                 >
-                  <span className="relative block aspect-[16/10] w-full overflow-hidden rounded-[6px] border border-[var(--line)] bg-[var(--soft)]">
+                  <Card className="relative block aspect-[16/10] w-full overflow-hidden rounded-[6px] border-[var(--line)] bg-[var(--soft)] shadow-none">
                     <img
                       className="block size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] group-focus-visible:scale-[1.02]"
                       src={photo.src}
@@ -73,7 +74,7 @@ export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
                       height={500}
                       decoding="async"
                     />
-                  </span>
+                  </Card>
                 </button>
               </li>
             );
@@ -86,7 +87,7 @@ export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
         label={active?.title ?? "近影预览"}
         closeLabel="关闭照片"
         onClose={handleClose}
-        className="max-h-[90svh] max-w-[min(92vw,860px)] overflow-visible border-0 bg-[var(--paper)] p-3 shadow-[0_30px_100px_#0005] backdrop:bg-[#151923cc] backdrop:backdrop-blur-[10px]"
+        className="w-fit max-h-[90svh] max-w-[min(92vw,860px)] border-0 bg-[var(--paper)] p-3"
       >
         {active && (
           <figure className="m-0">

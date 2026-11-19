@@ -1,4 +1,7 @@
 /* 暂时隐藏的文章、计划与联系栏目保存在 git 提交 3bb8b67 的 app/page.tsx 中，需要时可从那里恢复。 */
+import { Circle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import PhotosStrip from "./PhotosStrip";
 import ThemeToggle from "./ThemeToggle";
 import { getPhotosShareUrl, getRecentPhotos } from "./lib/photos";
@@ -20,7 +23,7 @@ export default async function Home() {
     <main className="page overflow-x-clip" id="top">
       <header className="site-header shell mx-auto flex h-[76px] w-[min(1360px,calc(100%-36px))] items-center justify-between sm:h-[84px] sm:w-[min(1360px,calc(100%-88px))]">
         <a
-          className="wordmark inline-flex items-center gap-3 text-[25px] leading-none font-[850] tracking-[-0.1em] focus-visible:outline-2 focus-visible:outline-offset-[6px] focus-visible:outline-[var(--accent)] sm:text-[27px]"
+          className="wordmark inline-flex items-center gap-3 font-display text-[25px] leading-none font-[850] tracking-[-0.08em] focus-visible:outline-2 focus-visible:outline-offset-[6px] focus-visible:outline-[var(--accent)] sm:text-[27px]"
           href="#top"
           aria-label="与航，返回顶部"
         >
@@ -45,7 +48,7 @@ export default async function Home() {
         aria-labelledby="apps-title"
       >
         <div className="section-heading mb-6 flex items-baseline justify-between sm:mb-8">
-          <h2 id="apps-title" className="m-0 font-sans text-[clamp(22px,2.2vw,30px)] leading-tight font-semibold tracking-[-0.03em] text-[var(--ink)]">
+          <h2 id="apps-title" className="m-0 font-display text-[clamp(22px,2.2vw,30px)] leading-tight font-semibold tracking-[-0.03em] text-[var(--ink)]">
             Apps
           </h2>
         </div>
@@ -58,7 +61,7 @@ export default async function Home() {
                 target="_blank"
                 rel="noreferrer"
               >
-                <span className="stamp relative isolate block aspect-square w-full overflow-hidden rounded-[6px] bg-[var(--art-ground)]">
+                <Card className="stamp relative isolate block aspect-square w-full overflow-hidden rounded-[6px] border-0 bg-[var(--art-ground)] shadow-none">
                   <span
                     className="stamp-art absolute inset-0 transition-transform duration-550 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-[1.035] group-focus-visible:scale-[1.035]"
                     aria-hidden="true"
@@ -68,14 +71,14 @@ export default async function Home() {
                     <i className="absolute block" />
                   </span>
                   <span
-                    className="art-letter pointer-events-none absolute right-[0.06em] bottom-[-0.32em] z-10 font-sans text-[clamp(76px,18vw,136px)] leading-none font-[750] tracking-[-0.12em] text-white [text-shadow:0_2px_20px_#19263d40] lg:text-[clamp(88px,9.5vw,138px)]"
+                    className="art-letter pointer-events-none absolute right-[0.06em] bottom-[-0.32em] z-10 font-display text-[clamp(76px,18vw,136px)] leading-none font-[750] tracking-[-0.12em] text-white [text-shadow:0_2px_20px_#19263d40] lg:text-[clamp(88px,9.5vw,138px)]"
                     aria-hidden="true"
                   >
                     {app.name[0]}
                   </span>
-                </span>
+                </Card>
                 <span className="app-title mt-3 block">
-                  <span className="app-name text-[clamp(16px,1.35vw,19px)] leading-[1.35] font-semibold tracking-[-0.02em] text-[var(--ink)] transition-colors group-hover:text-[var(--accent)]">
+                  <span className="app-name font-display text-[clamp(16px,1.35vw,19px)] leading-[1.35] font-semibold tracking-[-0.02em] text-[var(--ink)] transition-colors group-hover:text-[var(--accent)]">
                     {app.name}
                   </span>
                 </span>
@@ -92,7 +95,7 @@ export default async function Home() {
           aria-labelledby="photos-title"
         >
           <div className="section-heading mx-auto mb-1 w-[min(1360px,calc(100%-36px))] sm:mb-2 sm:w-[min(1360px,calc(100%-88px))]">
-            <h2 id="photos-title" className="m-0 font-sans text-[clamp(22px,2.2vw,30px)] leading-tight font-semibold tracking-[-0.03em] text-[var(--ink)]">
+            <h2 id="photos-title" className="m-0 font-serif text-[clamp(22px,2.2vw,30px)] leading-tight font-normal tracking-[0.03em] text-[var(--ink)]">
               近影
             </h2>
           </div>
@@ -102,16 +105,17 @@ export default async function Home() {
 
       <footer className="footer shell mx-auto mt-[clamp(64px,8vw,108px)] w-[min(1360px,calc(100%-36px))] pt-4 pb-9 sm:w-[min(1360px,calc(100%-88px))] sm:pt-6 sm:pb-11">
         <div className="footer-main flex items-center justify-between gap-6">
-          <span className="m-0 font-sans text-[20px] leading-none font-medium tracking-[0.04em] text-[var(--ink)] sm:text-[24px]">向前看</span>
-          <a
-            className="footer-period block size-7 text-[var(--muted)] transition-all duration-300 hover:-translate-y-0.5 hover:text-[var(--accent)] sm:size-8"
-            href="#top"
-            aria-label="返回顶部"
+          <span className="m-0 font-serif text-[22px] leading-none font-normal tracking-[0.08em] text-[var(--ink)] sm:text-[26px]">向前看</span>
+          <Button
+            variant="ghost"
+            size="icon"
+            asChild
+            className="footer-period size-7 rounded-full text-[var(--muted)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-transparent hover:text-[var(--accent)] sm:size-8"
           >
-            <svg className="block size-full" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-              <circle cx="50" cy="50" r="37" stroke="currentColor" strokeWidth="11" />
-            </svg>
-          </a>
+            <a href="#top" aria-label="返回顶部">
+              <Circle className="size-full" strokeWidth={2.4} aria-hidden="true" />
+            </a>
+          </Button>
         </div>
         <div className="footer-bottom mt-4 flex items-center text-xs text-[var(--muted)]">
           <span>© 2026 与航</span>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { Maximize2 } from "lucide-react";
 import LightboxDialog from "./LightboxDialog";
 
 export default function Postcard() {
@@ -36,9 +37,7 @@ export default function Postcard() {
             className="image-expand absolute bottom-3 left-3 z-10 grid size-8 place-items-center rounded-full bg-[#1b2826]/45 text-white opacity-0 backdrop-blur-xs transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
             aria-hidden="true"
           >
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" />
-            </svg>
+            <Maximize2 className="size-4" strokeWidth={1.6} />
           </span>
         </button>
         <div className="pointer-events-none absolute top-[18%] -left-7 z-20 grid size-[clamp(96px,10.2vw,132px)] -rotate-12 place-items-center sm:-left-18">

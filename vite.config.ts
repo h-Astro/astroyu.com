@@ -11,6 +11,11 @@ export default defineConfig(async () => {
   process.env.WRANGLER_LOG_PATH ??= ".wrangler/logs";
   process.env.MINIFLARE_REGISTRY_PATH ??= ".wrangler/registry";
 
+  // A Node preview does not need the local Workers emulator.
+  if (process.env.ASTROYU_NODE_PREVIEW === "1") {
+    return { plugins: [vinext()], server: { host: "127.0.0.1", port: 3000, watch: { useFsEvents: false, usePolling: true } } };
+  }
+
   // Wrangler snapshots its log path while the Cloudflare plugin is imported.
   const { cloudflare } = await import("@cloudflare/vite-plugin");
 
