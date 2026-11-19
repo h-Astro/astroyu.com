@@ -6,8 +6,8 @@ import ThemeToggle from "./ThemeToggle";
 const apps = [
   { name: "Relay", href: "https://relay.astroyu.com", domain: "relay.astroyu.com", note: "看世界", icon: "world" },
   { name: "Fit", href: "https://fit.astroyu.com/", domain: "fit.astroyu.com", note: "向前看", icon: "fit" },
-  { name: "Photos", href: "https://photos.astroyu.com", domain: "photos.astroyu.com", note: "忆往昔", icon: "photos", provider: "Immich", providerHref: "https://immich.app/" },
-  { name: "Videos", href: "https://v.astroyu.com", domain: "v.astroyu.com", note: "藏所爱", icon: "videos", provider: "Jellyfin", providerHref: "https://jellyfin.org/" },
+  { name: "Photos", href: "https://photos.astroyu.com", domain: "photos.astroyu.com", note: "忆往昔", icon: "photos" },
+  { name: "Videos", href: "https://v.astroyu.com", domain: "v.astroyu.com", note: "藏所爱", icon: "videos" },
 ];
 
 export default function Home() {
@@ -100,40 +100,30 @@ export default function Home() {
                   <span className="app-note font-sans text-[14px] leading-[1.4] font-medium text-[var(--ink)]">{app.note}</span>
                 </span>
               </a>
-              <span className="app-foot mt-1.5 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5 font-mono text-[12px] leading-[1.5] text-[var(--muted)]">
+              <span className="app-foot mt-1.5 flex items-baseline font-mono text-[12px] leading-[1.5] text-[var(--muted)]">
                 <span className="app-domain wrap-anywhere">{app.domain}</span>
-                {app.provider && (
-                  <a
-                    className="app-provider underline underline-offset-4 hover:text-[var(--accent)]"
-                    href={app.providerHref}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {app.provider}
-                  </a>
-                )}
               </span>
             </li>
           ))}
         </ul>
       </section>
 
-      <footer className="footer shell mx-auto mt-[clamp(55px,8vw,115px)] w-[min(1320px,calc(100%-36px))] p-0 sm:w-[min(1320px,calc(100%-96px))]">
-        <div className="footer-main relative isolate flex items-center justify-between overflow-hidden rounded-[5px] p-[clamp(20px,4vw,56px)] text-[#15334d]">
-          <span className="m-0 font-sans text-[clamp(50px,10vw,134px)] leading-none font-[750] tracking-[-0.09em]">向前看</span>
+      <footer className="footer shell mx-auto mt-[clamp(64px,8vw,108px)] w-[min(1360px,calc(100%-36px))] border-t border-[var(--line)] pt-7 pb-9 sm:w-[min(1360px,calc(100%-88px))] sm:pt-9 sm:pb-11">
+        <div className="footer-main flex items-center justify-between gap-6">
+          <span className="m-0 font-sans text-[20px] leading-none font-medium tracking-[0.04em] text-[var(--ink)] sm:text-[24px]">向前看</span>
           <a
-            className="footer-period block aspect-square w-[clamp(55px,12vw,156px)] text-[#15334d] transition-transform duration-350 hover:-translate-y-1.5"
+            className="footer-period block size-7 text-[var(--muted)] transition-all duration-300 hover:-translate-y-0.5 hover:text-[var(--accent)] sm:size-8"
             href="#top"
             aria-label="返回顶部"
           >
             <svg className="block size-full" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-              <circle cx="50" cy="50" r="37" stroke="currentColor" strokeWidth="13" />
+              <circle cx="50" cy="50" r="37" stroke="currentColor" strokeWidth="11" />
             </svg>
           </a>
         </div>
-        <div className="footer-bottom flex items-center gap-7 py-5 text-xs text-[var(--muted)]">
+        <div className="footer-bottom mt-4 flex items-center gap-5 text-xs text-[var(--muted)]">
           <span>© 2026 与航</span>
-          <div className="footer-line h-px flex-1 bg-[var(--line)]" aria-hidden="true" />
+          <div className="footer-line h-px flex-1 bg-[var(--line)] opacity-60" aria-hidden="true" />
         </div>
       </footer>
     </main>

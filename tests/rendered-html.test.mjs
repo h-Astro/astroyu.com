@@ -58,15 +58,14 @@ test("server-renders Yu Hang's minimal homepage", async () => {
   assert.deepEqual(appPositions, [...appPositions].sort((a, b) => a - b));
   assert.doesNotMatch(html, /3X-UI|docs\.sanaei\.dev/i);
 
-  for (const [url, note, provider, providerUrl] of [
-    ["https://photos.astroyu.com", "忆往昔", "Immich", "https://immich.app/"],
-    ["https://v.astroyu.com", "藏所爱", "Jellyfin", "https://jellyfin.org/"],
+  for (const [url, note] of [
+    ["https://photos.astroyu.com", "忆往昔"],
+    ["https://v.astroyu.com", "藏所爱"],
   ]) {
     assert.ok(html.includes(`href="${url}"`), url);
     assert.ok(html.includes(note), note);
-    assert.ok(html.includes(`href="${providerUrl}"`), providerUrl);
-    assert.ok(html.includes(`>${provider}</a>`), provider);
   }
+  assert.doesNotMatch(html, /Immich|Jellyfin|immich\.app|jellyfin\.org/);
   assert.doesNotMatch(html, /https:\/\/(?:relay|photos|v)\.inbsu\.com/);
 
   assert.match(html, />© 2026 与航</);

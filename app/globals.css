@@ -175,30 +175,6 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .app-videos i:first-child { width: 43%; height: 100%; left: 18%; top: 26%; background: #8451dc90; clip-path: polygon(0 48%, 100% 0, 100% 100%); }
 
-/* Footer banner collage backdrop */
-.footer-main {
-  background:
-    radial-gradient(ellipse at 1% 100%, #c8ee5c, transparent 52%),
-    linear-gradient(115deg, #90dcff, #b8f0e7 64%, #a3e4bc);
-}
-.footer-main::before {
-  content: "";
-  position: absolute;
-  inset: 0 12% 0 30%;
-  z-index: -1;
-  background: #b7f5e8a8;
-  pointer-events: none;
-}
-.footer-main::after {
-  content: "";
-  position: absolute;
-  inset: 20% 0 28% auto;
-  width: 25%;
-  z-index: -1;
-  background: #1a91f385;
-  pointer-events: none;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
