@@ -32,7 +32,7 @@ export default async function Home() {
       </header>
 
       <section className="temple-home" aria-labelledby="hero-title">
-        <img className="temple-home-image" src="/temple-home.webp" alt="蓝调手绘中，两个人并肩站在天坛祈年殿前" width={1774} height={887} fetchPriority="high" />
+        <img className="temple-home-image" src="/temple-home.webp" alt="蓝调手绘中，两个人并肩站在天坛祈年殿前" width={1774} height={887} fetchPriority="high" decoding="sync" />
         <h1 id="hero-title" className="temple-home-copy">
           <span>顺路的话，我们看一样的风景。</span>
           <span>不顺路的话，祝我们都能看到自己想要的风景。</span>
@@ -48,8 +48,6 @@ export default async function Home() {
           <h2 id="apps-title" className="m-0 font-sans text-[clamp(22px,2.2vw,30px)] leading-tight font-semibold tracking-[-0.03em] text-[var(--ink)]">
             Apps
           </h2>
-          <span className="section-rule hidden" aria-hidden="true" />
-          <span className="section-period hidden" aria-hidden="true" />
         </div>
         <ul className="apps grid w-full list-none grid-cols-2 gap-x-4 gap-y-8 p-0 sm:gap-6 lg:grid-cols-4">
           {apps.map((app) => (

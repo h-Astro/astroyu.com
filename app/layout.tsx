@@ -2,15 +2,25 @@ import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import "./globals.css";
 
+const ALLOWED_HOST = /^(?:(?:www\.)?astroyu\.com|localhost(?::\d+)?|127\.0\.0\.1(?::\d+)?)$/i;
+
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
-  const host = requestHeaders.get("host") ?? "localhost:3000";
-  const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  const socialImage = `${protocol}://${host}/og.jpg`;
+  const rawHost = requestHeaders.get("host")?.trim() ?? "";
+  const isAllowed = ALLOWED_HOST.test(rawHost);
+  const host = isAllowed ? rawHost : "astroyu.com";
+  const isLocal = /^(?:localhost|127\.0\.0\.1)(?::\d+)?$/i.test(host);
+  const protocol = isLocal ? "http" : "https";
+  const baseUrl = `${protocol}://${host}`;
+  const socialImage = `${baseUrl}/og.jpg`;
 
   return {
+    metadataBase: new URL(baseUrl),
     title: "与航 - 向前看",
     description: "顺路的话，我们看一样的风景。不顺路的话，祝我们都能看到自己想要的风景。",
+    alternates: {
+      canonical: "/",
+    },
     manifest: "/site.webmanifest",
     icons: {
       icon: [

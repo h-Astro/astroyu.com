@@ -1,22 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
+import LightboxDialog from "./LightboxDialog";
 
 export default function Postcard() {
   const [expanded, setExpanded] = useState(false);
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (expanded) dialog.showModal();
-    else dialog.close();
-  }, [expanded]);
-  useEffect(() => {
-    if (!expanded) return;
-    const before = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = before; };
-  }, [expanded]);
+  const handleClose = useCallback(() => setExpanded(false), []);
 
   return (
     <figure className="postcard relative mx-auto my-auto w-full max-w-[600px] py-3 pr-2 pl-7 sm:pt-8 sm:pr-16 sm:pb-24 sm:pl-20 lg:mr-0 lg:ml-auto">
@@ -66,24 +55,13 @@ export default function Postcard() {
           <span className="block">我们恰好在这一刻并肩而立。</span>
         </figcaption>
       </div>
-      <dialog
-        ref={dialogRef}
+      <LightboxDialog
+        open={expanded}
+        label="天坛明信片"
+        closeLabel="关闭明信片"
+        onClose={handleClose}
         className="postcard-dialog max-h-[90svh] max-w-[min(90vw,680px)] overflow-visible border-0 bg-white p-3 shadow-[0_30px_100px_#0005] backdrop:bg-[#151923cc] backdrop:backdrop-blur-[10px]"
-        aria-label="天坛明信片"
-        onCancel={() => setExpanded(false)}
-        onClose={() => setExpanded(false)}
-        onClick={event => { if (event.target === event.currentTarget) setExpanded(false); }}
       >
-        <button
-          className="dialog-close absolute top-3 right-3 grid size-[42px] cursor-pointer place-items-center rounded-full border border-[#22293620] bg-[#ffffffe8] text-[#222936]"
-          type="button"
-          aria-label="关闭明信片"
-          onClick={() => setExpanded(false)}
-        >
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-            <path d="m6 6 12 12M18 6 6 18" />
-          </svg>
-        </button>
         <img
           className="max-h-[calc(90svh-24px)] w-auto object-contain"
           src="/hero-yuhang-temple.jpg"
@@ -91,7 +69,7 @@ export default function Postcard() {
           width={1086}
           height={1448}
         />
-      </dialog>
+      </LightboxDialog>
     </figure>
   );
 }

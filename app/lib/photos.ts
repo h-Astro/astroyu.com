@@ -13,7 +13,17 @@ type SharedLinkMeta = {
   shareUrl: string;
 };
 
+type CacheEntry<T> = {
+  value: T;
+  expiresAt: number;
+  staleUntil: number;
+};
+
 const DEFAULT_SHARE_URL = "https://immich.astroyu.com/s/landing";
+const SHARE_TTL_MS = 10 * 60 * 1000;
+const PHOTOS_TTL_MS = 5 * 60 * 1000;
+const PHOTOS_STALE_MS = 60 * 60 * 1000;
+const MAX_GEO_CACHE_SIZE = 500;
 
 const MUNICIPALITIES = new Set(["北京市", "上海市", "天津市", "重庆市", "北京", "上海", "天津", "重庆"]);
 const EN_CITY_FALLBACK: Record<string, string> = {
@@ -26,8 +36,25 @@ const EN_CITY_FALLBACK: Record<string, string> = {
   Luoyang: "洛阳",
 };
 
+const shareCache = new Map<string, CacheEntry<SharedLinkMeta>>();
+const photosCache = new Map<string, CacheEntry<PhotoItem[]>>();
+const inflightPhotos = new Map<string, Promise<PhotoItem[]>>();
 const assetCityCache = new Map<string, string>();
 const coordCityCache = new Map<string, string>();
+
+function setBoundedMap(map: Map<string, string>, key: string, value: string): void {
+  if (map.size >= MAX_GEO_CACHE_SIZE) {
+    const oldest = map.keys().next().value;
+    if (oldest !== undefined) map.delete(oldest);
+  }
+  map.set(key, value);
+}
+
+function getEdgeCache(): Cache | null {
+  if (typeof caches === "undefined") return null;
+  const cacheStorage = caches as CacheStorage & { default?: Cache };
+  return cacheStorage.default ?? null;
+}
 
 function formatPhotoDate(iso: string | null | undefined): string {
   if (!iso) return "";
@@ -110,7 +137,7 @@ async function resolveZhCityForAsset(
     const coordKey = `${lat.toFixed(2)},${lon.toFixed(2)}`;
     const cachedCoord = coordCityCache.get(coordKey);
     if (cachedCoord) {
-      assetCityCache.set(assetId, cachedCoord);
+      setBoundedMap(assetCityCache, assetId, cachedCoord);
       return cachedCoord;
     }
 
@@ -124,15 +151,15 @@ async function resolveZhCityForAsset(
     );
     const zhCity = geo ? extractZhCity(geo) : "";
     if (zhCity) {
-      coordCityCache.set(coordKey, zhCity);
-      assetCityCache.set(assetId, zhCity);
+      setBoundedMap(coordCityCache, coordKey, zhCity);
+      setBoundedMap(assetCityCache, assetId, zhCity);
       return zhCity;
     }
   }
 
   const rawCity = asset?.exifInfo?.city?.trim() || fallbackCity?.trim() || "";
   const mapped = (rawCity && EN_CITY_FALLBACK[rawCity]) || rawCity;
-  if (mapped) assetCityCache.set(assetId, mapped);
+  if (mapped) setBoundedMap(assetCityCache, assetId, mapped);
   return mapped;
 }
 
@@ -142,6 +169,12 @@ export function getPhotosShareUrl(envShareUrl?: string): string {
 }
 
 export async function resolveSharedAlbum(shareUrl: string): Promise<SharedLinkMeta | null> {
+  const now = Date.now();
+  const cached = shareCache.get(shareUrl);
+  if (cached && cached.expiresAt > now) {
+    return cached.value;
+  }
+
   let parsed: URL;
   try {
     parsed = new URL(shareUrl);
@@ -160,17 +193,25 @@ export async function resolveSharedAlbum(shareUrl: string): Promise<SharedLinkMe
   if (!endpoint) return null;
 
   const data = await fetchJsonWithTimeout<{ key?: string; album?: { id?: string } }>(endpoint);
-  if (!data?.key || !data.album?.id) return null;
+  if (!data?.key || !data.album?.id) {
+    return cached && cached.staleUntil > now ? cached.value : null;
+  }
 
-  return {
+  const meta: SharedLinkMeta = {
     origin: parsed.origin,
     key: data.key,
     albumId: data.album.id,
     shareUrl,
   };
+  shareCache.set(shareUrl, {
+    value: meta,
+    expiresAt: now + SHARE_TTL_MS,
+    staleUntil: now + PHOTOS_STALE_MS,
+  });
+  return meta;
 }
 
-export async function getRecentPhotos(shareUrl: string, limit = 3): Promise<PhotoItem[]> {
+async function fetchRecentPhotosUncached(shareUrl: string, limit: number): Promise<PhotoItem[]> {
   const meta = await resolveSharedAlbum(shareUrl);
   if (!meta) return [];
 
@@ -179,24 +220,31 @@ export async function getRecentPhotos(shareUrl: string, limit = 3): Promise<Phot
   );
   if (!Array.isArray(buckets) || buckets.length === 0) return [];
 
+  // Fetch up to `limit` newest buckets in parallel to avoid sequential round trips.
+  const bucketResponses = await Promise.all(
+    buckets.slice(0, limit).map(async (bucket) => ({
+      bucket: bucket.timeBucket,
+      data: await fetchJsonWithTimeout<{
+        id?: string[];
+        isImage?: boolean[];
+        isTrashed?: boolean[];
+        fileCreatedAt?: string[];
+        city?: (string | null)[];
+      }>(
+        `${meta.origin}/api/timeline/bucket?albumId=${encodeURIComponent(meta.albumId)}&timeBucket=${encodeURIComponent(bucket.timeBucket)}&key=${encodeURIComponent(meta.key)}`,
+      ),
+    })),
+  );
+
   const rawItems: Array<{ id: string; dateText: string; fallbackCity: string | null }> = [];
-  for (const bucket of buckets) {
+  for (const { bucket, data } of bucketResponses) {
     if (rawItems.length >= limit) break;
-    const data = await fetchJsonWithTimeout<{
-      id?: string[];
-      isImage?: boolean[];
-      isTrashed?: boolean[];
-      fileCreatedAt?: string[];
-      city?: (string | null)[];
-    }>(
-      `${meta.origin}/api/timeline/bucket?albumId=${encodeURIComponent(meta.albumId)}&timeBucket=${encodeURIComponent(bucket.timeBucket)}&key=${encodeURIComponent(meta.key)}`,
-    );
     if (!data?.id) continue;
 
     for (let i = 0; i < data.id.length && rawItems.length < limit; i++) {
       const id = data.id[i];
       if (!id || data.isImage?.[i] === false || data.isTrashed?.[i] === true) continue;
-      const dateText = formatPhotoDate(data.fileCreatedAt?.[i]) || bucket.timeBucket.replace(/-/g, ".");
+      const dateText = formatPhotoDate(data.fileCreatedAt?.[i]) || bucket.replace(/-/g, ".");
       rawItems.push({
         id,
         dateText,
@@ -217,4 +265,68 @@ export async function getRecentPhotos(shareUrl: string, limit = 3): Promise<Phot
       };
     }),
   );
+}
+
+export async function getRecentPhotos(shareUrl: string, limit = 3): Promise<PhotoItem[]> {
+  const cacheKey = `${shareUrl}#${limit}`;
+  const now = Date.now();
+  const memCached = photosCache.get(cacheKey);
+  if (memCached && memCached.expiresAt > now) {
+    return memCached.value;
+  }
+
+  const edgeCache = getEdgeCache();
+  const edgeCacheUrl = `https://cache.astroyu.internal/recent-photos?share=${encodeURIComponent(shareUrl)}&limit=${limit}`;
+  if (edgeCache) {
+    try {
+      const edgeHit = await edgeCache.match(edgeCacheUrl);
+      if (edgeHit) {
+        const items = (await edgeHit.json()) as PhotoItem[];
+        photosCache.set(cacheKey, {
+          value: items,
+          expiresAt: now + PHOTOS_TTL_MS,
+          staleUntil: now + PHOTOS_STALE_MS,
+        });
+        return items;
+      }
+    } catch {
+      // Ignore Cache API read failures and fall through to origin fetch.
+    }
+  }
+
+  let pending = inflightPhotos.get(cacheKey);
+  if (!pending) {
+    pending = fetchRecentPhotosUncached(shareUrl, limit).finally(() => {
+      inflightPhotos.delete(cacheKey);
+    });
+    inflightPhotos.set(cacheKey, pending);
+  }
+
+  const items = await pending;
+  if (items.length > 0) {
+    photosCache.set(cacheKey, {
+      value: items,
+      expiresAt: now + PHOTOS_TTL_MS,
+      staleUntil: now + PHOTOS_STALE_MS,
+    });
+    if (edgeCache) {
+      edgeCache
+        .put(
+          edgeCacheUrl,
+          new Response(JSON.stringify(items), {
+            headers: {
+              "content-type": "application/json",
+              "cache-control": `public, max-age=${Math.floor(PHOTOS_TTL_MS / 1000)}`,
+            },
+          }),
+        )
+        .catch(() => {});
+    }
+    return items;
+  }
+
+  if (memCached && memCached.staleUntil > now) {
+    return memCached.value;
+  }
+  return [];
 }

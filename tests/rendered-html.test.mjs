@@ -27,11 +27,16 @@ test("server-renders Yu Hang's minimal homepage", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+  assert.equal(response.headers.get("referrer-policy"), "strict-origin-when-cross-origin");
+  assert.equal(response.headers.get("x-frame-options"), "SAMEORIGIN");
+  assert.match(response.headers.get("cache-control") ?? "", /s-maxage=300/);
 
   const html = await response.text();
   const text = html.replace(/<[^>]+>/g, "");
   assert.match(html, /<title>与航 - 向前看<\/title>/);
   assert.match(html, /<html lang="zh-CN">/);
+  assert.match(html, /rel="canonical" href="https:\/\/astroyu\.com\/?"/);
   assert.match(html, /rel="icon" href="\/favicon\.svg\?v=4"/);
   assert.match(html, /name="theme-color"/);
   assert.ok(html.includes('/apple-touch-icon.png?v=4'));
@@ -89,4 +94,20 @@ test("build emits a deployable Cloudflare Worker", async () => {
     { pattern: "astroyu.com", custom_domain: true },
     { pattern: "www.astroyu.com", custom_domain: true },
   ]);
+});
+
+test("ignores untrusted Host headers in social image metadata", async () => {
+  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
+  workerUrl.searchParams.set("test", `host-${process.pid}-${Date.now()}`);
+  const { default: worker } = await import(workerUrl.href);
+  const response = await worker.fetch(
+    new Request("https://astroyu.com/", {
+      headers: { accept: "text/html", host: "evil.example" },
+    }),
+    { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
+    { waitUntil() {}, passThroughOnException() {} },
+  );
+  const html = await response.text();
+  assert.match(html, /https:\/\/astroyu\.com\/og\.jpg/);
+  assert.doesNotMatch(html, /evil\.example/);
 });

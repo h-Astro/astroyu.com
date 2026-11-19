@@ -1,29 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
+import LightboxDialog from "./LightboxDialog";
 import type { PhotoItem } from "./lib/photos";
 
 export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
   const [active, setActive] = useState<PhotoItem | null>(null);
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (active) {
-      if (!dialog.open) dialog.showModal();
-    } else if (dialog.open) {
-      dialog.close();
-    }
-  }, [active]);
-
-  useEffect(() => {
-    if (!active) return;
-    const before = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = before; };
-  }, [active]);
+  const handleClose = useCallback(() => setActive(null), []);
 
   const durationSec = Math.max(40, photos.length * 12);
   const track = [...photos, ...photos];
@@ -97,24 +81,13 @@ export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
         </ul>
       </div>
 
-      <dialog
-        ref={dialogRef}
+      <LightboxDialog
+        open={active !== null}
+        label={active?.title ?? "近影预览"}
+        closeLabel="关闭照片"
+        onClose={handleClose}
         className="max-h-[90svh] max-w-[min(92vw,860px)] overflow-visible border-0 bg-[var(--paper)] p-3 shadow-[0_30px_100px_#0005] backdrop:bg-[#151923cc] backdrop:backdrop-blur-[10px]"
-        aria-label={active?.title ?? "近影预览"}
-        onCancel={() => setActive(null)}
-        onClose={() => setActive(null)}
-        onClick={(event) => { if (event.target === event.currentTarget) setActive(null); }}
       >
-        <button
-          className="absolute top-3 right-3 grid size-[40px] cursor-pointer place-items-center rounded-full border border-[#22293620] bg-[#ffffffe8] text-[#222936]"
-          type="button"
-          aria-label="关闭照片"
-          onClick={() => setActive(null)}
-        >
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-            <path d="m6 6 12 12M18 6 6 18" />
-          </svg>
-        </button>
         {active && (
           <figure className="m-0">
             <img
@@ -130,7 +103,7 @@ export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
             </figcaption>
           </figure>
         )}
-      </dialog>
+      </LightboxDialog>
     </>
   );
 }
