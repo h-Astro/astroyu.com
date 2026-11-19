@@ -70,7 +70,7 @@ test("server-renders Yu Hang's minimal homepage", async () => {
 
   assert.match(html, />© 2026 与航</);
   assert.match(html, />向前看</);
-  assert.match(html, /class="postmark"/);
+  assert.match(html, /class="postmark hero-dialog-mark"/);
   assert.doesNotMatch(html, /hello@inbsu\.com|mailto:/);
   assert.doesNotMatch(html, /在潮州，沿着韩江走到天黑|把愿望写具体|如果你也在路上/);
   assert.doesNotMatch(html, /林屿|linyu\.design/);

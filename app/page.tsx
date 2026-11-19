@@ -32,34 +32,15 @@ export default async function Home() {
         <ThemeToggle />
       </header>
 
-      <section
-        className="hero relative isolate w-full overflow-hidden bg-[image:var(--hero-bg)]"
-        aria-labelledby="hero-title"
-      >
-        <div className="mx-auto grid min-h-[clamp(540px,50vw,680px)] w-[min(1360px,calc(100%-36px))] grid-cols-1 items-center gap-y-10 py-9 sm:w-[min(1360px,calc(100%-88px))] sm:py-[clamp(44px,5.2vw,72px)] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-x-12">
-          <h1
-            className="intro m-0 flex min-w-0 flex-col justify-center gap-6 font-sans text-[var(--hero-ink)] sm:gap-7 lg:pb-14"
-            id="hero-title"
-          >
-            <span className="intro-first block">
-              <span className="intro-opening mb-2.5 block text-[clamp(18px,1.75vw,24px)] leading-[1.35] font-medium tracking-[-0.01em] text-[var(--hero-ink)]">
-                顺路的话，
-              </span>
-              <span className="intro-main block text-[clamp(34px,4vw,54px)] leading-[1.14] font-semibold tracking-[-0.04em] text-[var(--hero-ink)]">
-                我们看一样的<span className="scenery-word mt-0.5 block">风景。</span>
-              </span>
-            </span>
-            <span className="intro-second block w-fit max-w-full border-t border-[var(--hero-line)] pt-4 sm:pt-5">
-              <span className="intro-second-opening mb-1.5 block text-[clamp(15px,1.4vw,19px)] leading-[1.4] font-medium tracking-[-0.01em] text-[var(--hero-muted)]">
-                不顺路的话，
-              </span>
-              <span className="intro-second-message block text-[clamp(20px,2.1vw,28px)] leading-[1.38] font-semibold tracking-[-0.025em] text-[var(--hero-ink)]">
-                祝我们都能看到自己想要的风景。
-              </span>
-            </span>
+      <section className="hero" aria-labelledby="hero-title">
+        <Postcard>
+          <h1 id="hero-title" className="hero-title">
+            <span>顺路的话，</span><span>我们看一样的风景。</span>
           </h1>
-          <Postcard />
-        </div>
+          <p className="hero-subtitle">
+            <span>不顺路的话，</span><span>祝我们都能看到自己想要的风景。</span>
+          </p>
+        </Postcard>
       </section>
 
       <section

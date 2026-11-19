@@ -5,6 +5,8 @@ import type { PhotoItem } from "./lib/photos";
 
 export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
   const [active, setActive] = useState<PhotoItem | null>(null);
+  const stripRef = useRef<HTMLUListElement>(null);
+  const [edges, setEdges] = useState({ start: true, end: false });
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -21,14 +23,42 @@ export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
     if (!active) return;
     const before = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = before; };
+    useEffect(() => {
+    const strip = stripRef.current;
+    if (!strip) return;
+    const update = () => setEdges({
+      start: strip.scrollLeft < 2,
+      end: strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 2,
+    });
+    const observer = new ResizeObserver(update);
+    observer.observe(strip);
+    strip.addEventListener("scroll", update, { passive: true });
+    update();
+    return () => {
+      observer.disconnect();
+      strip.removeEventListener("scroll", update);
+    };
+  }, [photos.length]);
+
+  function move(direction: number) {
+    const strip = stripRef.current;
+    const card = strip?.firstElementChild;
+    if (!strip || !card) return;
+    const gap = parseFloat(getComputedStyle(strip).columnGap) || 0;
+    strip.scrollBy({
+      left: direction * (card.getBoundingClientRect().width + gap),
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    });
+  }
+
+  return () => { document.body.style.overflow = before; };
   }, [active]);
 
   return (
     <>
-      <ul className="photos-grid grid w-full list-none grid-cols-1 gap-x-6 gap-y-8 p-0 sm:grid-cols-3">
+      <ul ref={stripRef} id="recent-photos-track" className="photos-track" aria-label="近影照片">
         {photos.map((photo) => (
-          <li className="min-w-0" key={photo.id}>
+          <li className="photos-slide min-w-0" key={photo.id}>
             <button
               className="group block w-full cursor-zoom-in text-left focus-visible:outline-2 focus-visible:outline-offset-[6px] focus-visible:outline-[var(--accent)]"
               type="button"
@@ -36,13 +66,14 @@ export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
               aria-label={`放大查看 ${photo.title ?? photo.meta}`}
               aria-haspopup="dialog"
             >
-              <span className="relative block aspect-[4/3] w-full overflow-hidden rounded-[6px] border border-[var(--line)] bg-[var(--soft)]">
+              <span className="relative block aspect-video w-full overflow-hidden rounded-[6px] border border-[var(--line)] bg-[var(--soft)]">
                 <img
                   className="block size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.025] group-focus-visible:scale-[1.025]"
                   src={photo.src}
                   alt={photo.alt}
                   width={800}
                   height={600}
+                  loading="lazy"
                   decoding="async"
                 />
               </span>
@@ -58,6 +89,25 @@ export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
           </li>
         ))}
       </ul>
+
+      {photos.length > 1 && (
+        <div className="photos-controls">
+          {([-1, 1] as const).map((direction) => (
+            <button
+              key={direction}
+              type="button"
+              aria-controls="recent-photos-track"
+              aria-label={direction < 0 ? "上一张照片" : "下一张照片"}
+              disabled={direction < 0 ? edges.start : edges.end}
+              onClick={() => move(direction)}
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                <path d={direction < 0 ? "m14 5-7 7 7 7" : "m10 5 7 7-7 7"} />
+              </svg>
+            </button>
+          ))}
+        </div>
+      )}
 
       <dialog
         ref={dialogRef}
