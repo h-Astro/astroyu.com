@@ -32,26 +32,12 @@ export default async function Home() {
         <ThemeToggle />
       </header>
 
-      <section
-        className="hero relative isolate w-full overflow-hidden bg-[image:var(--hero-bg)]"
-        aria-labelledby="hero-title"
-      >
-        <div className="mx-auto flex min-h-[clamp(320px,32vw,440px)] w-[min(1360px,calc(100%-36px))] items-center justify-center py-[clamp(64px,9vw,120px)] sm:w-[min(1360px,calc(100%-88px))]">
-          <h1
-            className="intro m-0 flex flex-col items-center gap-4 text-center font-sans text-[clamp(20px,2.55vw,36px)] leading-[1.45] font-semibold tracking-[-0.025em] text-[var(--hero-ink)] sm:gap-5"
-            id="hero-title"
-          >
-            <span className="block sm:whitespace-nowrap">
-              <span>顺路的话，</span>
-              <span>我们看一样的风景。</span>
-            </span>
-            <span className="block sm:whitespace-nowrap">
-              <span>不顺路的话，</span>
-              <span>祝我们都能看到自己想要的风景。</span>
-            </span>
-          </h1>
-          {/* <Postcard /> */}
-        </div>
+      <section className="temple-home" aria-labelledby="hero-title">
+        <img className="temple-home-image" src="/temple-home.webp" alt="蓝调手绘中，两个人并肩站在天坛祈年殿前" width={1774} height={887} fetchPriority="high" />
+        <h1 id="hero-title" className="temple-home-copy">
+          <span>顺路的话，我们看一样的风景。</span>
+          <span>不顺路的话，祝我们都能看到自己想要的风景。</span>
+        </h1>
       </section>
 
       <section
