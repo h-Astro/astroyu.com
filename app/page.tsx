@@ -34,9 +34,11 @@ export default function Home() {
                   <i /><i /><i /><i />
                 </span>
                 <span className="app-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+              </span>
+              <span className="app-title">
+                <span className="app-name">{app.name}</span>
                 <span className="app-note">{app.note}</span>
               </span>
-              <span className="app-name">{app.name}</span>
             </a>
             <span className="app-foot">
               <span className="app-domain">{app.domain}</span>
