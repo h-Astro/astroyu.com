@@ -13,27 +13,33 @@ const apps = [
 export default function Home() {
   return <main className="page" id="top">
     <header className="site-header shell">
-      <a className="wordmark" href="#top" aria-label="与航，返回顶部"><img className="brand-mark" src="/logo.svg?v=3" width={30} height={30} alt="" /><span className="brand-name">与航<span>。</span></span></a>
+      <a className="wordmark" href="#top" aria-label="与航，返回顶部"><img className="brand-mark" src="/logo.svg?v=4" width={30} height={30} alt="" /><span className="brand-name">与航<span>。</span></span></a>
       <div className="header-line" aria-hidden="true" /><ThemeToggle />
     </header>
     <section className="hero shell" aria-labelledby="hero-title">
       <h1 className="intro" id="hero-title">
-        <span className="intro-first"><span className="intro-opening">顺路的话，</span><span className="intro-main">我们看一样的<span className="scenery-word">风景<span className="scenery-stop">。</span><svg viewBox="0 0 240 22" preserveAspectRatio="none" aria-hidden="true"><path d="M4 14Q116-2 234 10M12 20Q121 4 221 15" /></svg></span></span></span>
-        <span className="intro-second"><span className="quote-mark" aria-hidden="true">“</span><span className="intro-second-opening">不顺路的话，</span><span className="intro-second-message">祝我们都能看到<span>自己想要的风景。</span></span><span className="quote-period" aria-hidden="true" /></span>
+        <span className="intro-first">
+          <span className="intro-opening">顺路的话，</span>
+          <span className="intro-main">我们看一样的<span className="scenery-word">风景。</span></span>
+        </span>
+        <span className="intro-second">
+          <span className="intro-second-opening">不顺路的话，</span>
+          <span className="intro-second-message">祝我们都能看到自己想要的风景。</span>
+        </span>
       </h1>
       <Postcard />
     </section>
     <section className="apps-section shell" id="apps" aria-labelledby="apps-title">
       <div className="section-heading"><h2 id="apps-title">Apps</h2><span className="section-rule" aria-hidden="true" /><span className="section-period" aria-hidden="true" /></div>
       <ul className="apps">
-        {apps.map((app, index) => (
+        {apps.map((app) => (
           <li className={`app app-${app.icon}`} key={app.name}>
             <a className="app-link" href={app.href} target="_blank" rel="noreferrer">
               <span className="stamp">
                 <span className="stamp-art" aria-hidden="true">
-                  <i /><i /><i /><i />
+                  <i /><i /><i />
                 </span>
-                <span className="app-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                <span className="art-letter" aria-hidden="true">{app.name[0]}</span>
               </span>
               <span className="app-title">
                 <span className="app-name">{app.name}</span>
