@@ -61,7 +61,7 @@ export default function Postcard() {
             <text className="postmark-year" x="60" y="72" textAnchor="middle">天坛</text>
           </svg>
         </div>
-        <figcaption className="postcard-card relative z-20 mt-3 ml-auto w-[min(100%,292px)] border border-[var(--hero-card-line)] bg-[var(--hero-card-bg)] px-4 py-3 font-sans text-[13px] leading-[1.6] text-[var(--hero-ink)] backdrop-blur-md sm:absolute sm:-right-14 sm:-bottom-[68px] sm:mt-0 sm:w-[clamp(236px,21vw,288px)] sm:px-5 sm:py-3.5">
+        <figcaption className="postcard-card relative z-20 mt-3 ml-auto w-[min(100%,292px)] border border-[var(--hero-card-line)] bg-[var(--hero-card-bg)] px-4 py-3 font-sans text-[13px] leading-[1.6] text-[var(--hero-ink)] backdrop-blur-md sm:absolute sm:-right-14 sm:-bottom-10 sm:mt-0 sm:w-[clamp(236px,21vw,288px)] sm:px-5 sm:py-3.5">
           <span className="block font-medium">天地这么大，</span>
           <span className="block text-[var(--hero-muted)]">我们恰好在这一刻并肩而立。</span>
         </figcaption>

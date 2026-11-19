@@ -134,19 +134,6 @@ img { display: block; max-width: 100%; height: auto; }
 .postmark .postmark-day { font-size: 13px; font-weight: 700; letter-spacing: .5px; }
 .postmark .postmark-year { font-family: var(--song); font-size: 10px; letter-spacing: 2px; }
 
-/* Subtle technical grid-line accent in the bottom-right frosted card */
-.postcard-card::before {
-  content: "01.31 · TEMPLE OF HEAVEN · BEIJING";
-  display: block;
-  margin-bottom: 6px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid var(--hero-card-line);
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: .12em;
-  color: var(--hero-muted);
-}
-
 /* App stamp artwork layers */
 .stamp-art::after {
   content: "";
