@@ -5,6 +5,7 @@ import type { PhotoItem } from "./lib/photos";
 
 export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
   const [active, setActive] = useState<PhotoItem | null>(null);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -24,44 +25,70 @@ export default function PhotosStrip({ photos }: { photos: PhotoItem[] }) {
     return () => { document.body.style.overflow = before; };
   }, [active]);
 
-  const durationSec = Math.max(24, photos.length * 7);
+  const durationSec = Math.max(40, photos.length * 12);
   const track = [...photos, ...photos];
+  const hasFocus = focusedIndex !== null;
 
   return (
     <>
-      <div className="photos-marquee w-full overflow-hidden">
+      <div
+        className="photos-marquee w-full overflow-hidden pt-8"
+        onPointerLeave={() => setFocusedIndex(null)}
+      >
         <ul
           className="photos-grid flex w-max list-none items-start gap-5 p-0 pr-5 sm:gap-6 sm:pr-6"
-          style={{ animation: `photos-marquee ${durationSec}s linear infinite` }}
+          style={{
+            animation: `photos-marquee ${durationSec}s linear infinite`,
+            animationPlayState: hasFocus || active ? "paused" : undefined,
+          }}
         >
           {track.map((photo, index) => {
             const isClone = index >= photos.length;
+            const isFocused = focusedIndex === index;
+            const isDimmed = hasFocus && !isFocused;
             return (
               <li
-                className="w-[78vw] shrink-0 sm:w-[46vw] lg:w-[36vw] lg:max-w-[540px]"
+                className={`relative w-[78vw] shrink-0 transition-[opacity,filter] duration-300 ease-out sm:w-[46vw] lg:w-[36vw] lg:max-w-[540px] ${
+                  isDimmed ? "opacity-45 blur-[2px]" : "opacity-100 blur-0"
+                }`}
                 key={`${photo.id}-${index}`}
                 aria-hidden={isClone || undefined}
+                onMouseEnter={() => setFocusedIndex(index)}
+                onMouseLeave={() => setFocusedIndex((prev) => (prev === index ? null : prev))}
+                onPointerDown={() => setFocusedIndex(index)}
+                onPointerUp={() => setFocusedIndex((prev) => (prev === index ? null : prev))}
+                onPointerCancel={() => setFocusedIndex((prev) => (prev === index ? null : prev))}
               >
+                <span
+                  aria-hidden={!isFocused}
+                  className={`pointer-events-none absolute -top-7 left-0 font-mono text-[13px] leading-none font-medium tracking-[0.01em] text-[var(--ink)] transition-opacity duration-200 ${
+                    isFocused ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  {photo.meta}
+                </span>
                 <button
                   className="group block w-full cursor-zoom-in text-left focus-visible:outline-2 focus-visible:outline-offset-[6px] focus-visible:outline-[var(--accent)]"
                   type="button"
                   tabIndex={isClone ? -1 : undefined}
-                  onClick={() => setActive(photo)}
+                  onFocus={() => setFocusedIndex(index)}
+                  onBlur={() => setFocusedIndex((prev) => (prev === index ? null : prev))}
+                  onClick={() => {
+                    setFocusedIndex(null);
+                    setActive(photo);
+                  }}
                   aria-label={`放大查看 ${photo.title ?? photo.meta}`}
                   aria-haspopup="dialog"
                 >
                   <span className="relative block aspect-[16/10] w-full overflow-hidden rounded-[6px] border border-[var(--line)] bg-[var(--soft)]">
                     <img
-                      className="block size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.025] group-focus-visible:scale-[1.025]"
+                      className="block size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] group-focus-visible:scale-[1.02]"
                       src={photo.src}
                       alt={isClone ? "" : photo.alt}
                       width={800}
                       height={500}
                       decoding="async"
                     />
-                  </span>
-                  <span className="mt-3 block font-mono text-[12px] leading-[1.5] text-[var(--muted)] transition-colors group-hover:text-[var(--ink)]">
-                    {photo.meta}
                   </span>
                 </button>
               </li>
