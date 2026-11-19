@@ -45,32 +45,21 @@ test("server-renders Yu Hang's minimal homepage", async () => {
   assert.doesNotMatch(html, /Places I’ve been|days as they unfold|足迹所至/i);
   assert.doesNotMatch(html, /Vast as the world may be|纵天地巍峨|命运的洪流/);
 
-  assert.match(html, /hero-yuhang-temple\.jpg/);
-  assert.match(text, /天地这么大，我们恰好在这一刻并肩而立。/);
   assert.doesNotMatch(html, /about-volcano-portrait\.jpg|鸡蛋/);
   assert.match(html, /与航<span>。<\/span>/);
 
   assert.ok(html.includes('href="https://relay.astroyu.com"'));
-  assert.ok(html.includes("看世界"));
   const appUrls = ["https://relay.astroyu.com", "https://fit.astroyu.com/", "https://photos.astroyu.com", "https://v.astroyu.com"];
   const appPositions = appUrls.map((url) => html.indexOf(`href="${url}"`));
   assert.ok(appPositions.every((position) => position >= 0));
   assert.deepEqual(appPositions, [...appPositions].sort((a, b) => a - b));
   assert.doesNotMatch(html, /3X-UI|docs\.sanaei\.dev/i);
-
-  for (const [url, note] of [
-    ["https://photos.astroyu.com", "忆往昔"],
-    ["https://v.astroyu.com", "藏所爱"],
-  ]) {
-    assert.ok(html.includes(`href="${url}"`), url);
-    assert.ok(html.includes(note), note);
-  }
+  assert.doesNotMatch(html, /看世界|忆往昔|藏所爱|class="app-note|class="app-domain/);
   assert.doesNotMatch(html, /Immich|Jellyfin|immich\.app|jellyfin\.org/);
   assert.doesNotMatch(html, /https:\/\/(?:relay|photos|v)\.inbsu\.com/);
 
   assert.match(html, />© 2026 与航</);
   assert.match(html, />向前看</);
-  assert.match(html, /class="postmark"/);
   assert.doesNotMatch(html, /hello@inbsu\.com|mailto:/);
   assert.doesNotMatch(html, /在潮州，沿着韩江走到天黑|把愿望写具体|如果你也在路上/);
   assert.doesNotMatch(html, /林屿|linyu\.design/);

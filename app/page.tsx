@@ -1,6 +1,6 @@
 /* 暂时隐藏的文章、计划与联系栏目保存在 git 提交 3bb8b67 的 app/page.tsx 中，需要时可从那里恢复。 */
 import PhotosStrip from "./PhotosStrip";
-import Postcard from "./Postcard";
+// import Postcard from "./Postcard";
 import ThemeToggle from "./ThemeToggle";
 import { getPhotosShareUrl, getRecentPhotos } from "./lib/photos";
 
@@ -8,10 +8,10 @@ export const dynamic = "force-dynamic";
 
 // Relay deliberately names no provider.
 const apps = [
-  { name: "Relay", href: "https://relay.astroyu.com", domain: "relay.astroyu.com", note: "看世界", icon: "world" },
-  { name: "Fit", href: "https://fit.astroyu.com/", domain: "fit.astroyu.com", note: "向前看", icon: "fit" },
-  { name: "Photos", href: "https://photos.astroyu.com", domain: "photos.astroyu.com", note: "忆往昔", icon: "photos" },
-  { name: "Videos", href: "https://v.astroyu.com", domain: "v.astroyu.com", note: "藏所爱", icon: "videos" },
+  { name: "Relay", href: "https://relay.astroyu.com", icon: "world" },
+  { name: "Fit", href: "https://fit.astroyu.com/", icon: "fit" },
+  { name: "Photos", href: "https://photos.astroyu.com", icon: "photos" },
+  { name: "Videos", href: "https://v.astroyu.com", icon: "videos" },
 ];
 
 export default async function Home() {
@@ -36,29 +36,21 @@ export default async function Home() {
         className="hero relative isolate w-full overflow-hidden bg-[image:var(--hero-bg)]"
         aria-labelledby="hero-title"
       >
-        <div className="mx-auto grid min-h-[clamp(540px,50vw,680px)] w-[min(1360px,calc(100%-36px))] grid-cols-1 items-center gap-y-10 py-9 sm:w-[min(1360px,calc(100%-88px))] sm:py-[clamp(44px,5.2vw,72px)] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-x-12">
+        <div className="mx-auto flex min-h-[clamp(320px,32vw,440px)] w-[min(1360px,calc(100%-36px))] items-center justify-center py-[clamp(64px,9vw,120px)] sm:w-[min(1360px,calc(100%-88px))]">
           <h1
-            className="intro m-0 flex min-w-0 flex-col justify-center gap-7 font-sans text-[var(--hero-ink)] sm:gap-8 lg:pb-14"
+            className="intro m-0 flex flex-col items-center gap-4 text-center font-sans text-[clamp(20px,2.55vw,36px)] leading-[1.45] font-semibold tracking-[-0.025em] text-[var(--hero-ink)] sm:gap-5"
             id="hero-title"
           >
-            <span className="intro-first block">
-              <span className="intro-opening mb-3 block text-[clamp(16px,1.5vw,21px)] leading-[1.4] font-normal tracking-[0.01em] text-[var(--hero-muted)]">
-                顺路的话，
-              </span>
-              <span className="intro-main block text-[clamp(36px,4.35vw,58px)] leading-[1.16] font-semibold tracking-[-0.03em] text-[var(--hero-ink)]">
-                我们看一样的<span className="scenery-word mt-1 block">风景。</span>
-              </span>
+            <span className="block sm:whitespace-nowrap">
+              <span>顺路的话，</span>
+              <span>我们看一样的风景。</span>
             </span>
-            <span className="intro-second block w-fit max-w-full border-t border-[var(--hero-line)] pt-5 sm:pt-6">
-              <span className="intro-second-opening mb-1.5 block text-[clamp(13px,1.1vw,15px)] leading-[1.5] font-normal tracking-[0.01em] text-[var(--hero-muted)]">
-                不顺路的话，
-              </span>
-              <span className="intro-second-message block text-[clamp(16px,1.55vw,21px)] leading-[1.55] font-medium tracking-[-0.01em] text-[var(--hero-muted)]">
-                祝我们都能看到自己想要的风景。
-              </span>
+            <span className="block sm:whitespace-nowrap">
+              <span>不顺路的话，</span>
+              <span>祝我们都能看到自己想要的风景。</span>
             </span>
           </h1>
-          <Postcard />
+          {/* <Postcard /> */}
         </div>
       </section>
 
@@ -99,16 +91,12 @@ export default async function Home() {
                     {app.name[0]}
                   </span>
                 </span>
-                <span className="app-title mt-3.5 flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
+                <span className="app-title mt-3 block">
                   <span className="app-name text-[clamp(16px,1.35vw,19px)] leading-[1.35] font-semibold tracking-[-0.02em] text-[var(--ink)] transition-colors group-hover:text-[var(--accent)]">
                     {app.name}
                   </span>
-                  <span className="app-note font-sans text-[14px] leading-[1.4] font-medium text-[var(--ink)]">{app.note}</span>
                 </span>
               </a>
-              <span className="app-foot mt-1.5 flex items-baseline font-mono text-[12px] leading-[1.5] text-[var(--muted)]">
-                <span className="app-domain wrap-anywhere">{app.domain}</span>
-              </span>
             </li>
           ))}
         </ul>
