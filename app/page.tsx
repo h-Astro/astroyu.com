@@ -1,6 +1,5 @@
 /* 暂时隐藏的文章、计划与联系栏目保存在 git 提交 3bb8b67 的 app/page.tsx 中，需要时可从那里恢复。 */
 import PhotosStrip from "./PhotosStrip";
-// import Postcard from "./Postcard";
 import ThemeToggle from "./ThemeToggle";
 import { getPhotosShareUrl, getRecentPhotos } from "./lib/photos";
 
@@ -103,7 +102,7 @@ export default async function Home() {
         </section>
       )}
 
-      <footer className="footer shell mx-auto mt-[clamp(64px,8vw,108px)] w-[min(1360px,calc(100%-36px))] border-t border-[var(--line)] pt-7 pb-9 sm:w-[min(1360px,calc(100%-88px))] sm:pt-9 sm:pb-11">
+      <footer className="footer shell mx-auto mt-[clamp(64px,8vw,108px)] w-[min(1360px,calc(100%-36px))] pt-4 pb-9 sm:w-[min(1360px,calc(100%-88px))] sm:pt-6 sm:pb-11">
         <div className="footer-main flex items-center justify-between gap-6">
           <span className="m-0 font-sans text-[20px] leading-none font-medium tracking-[0.04em] text-[var(--ink)] sm:text-[24px]">向前看</span>
           <a
@@ -116,9 +115,8 @@ export default async function Home() {
             </svg>
           </a>
         </div>
-        <div className="footer-bottom mt-4 flex items-center gap-5 text-xs text-[var(--muted)]">
+        <div className="footer-bottom mt-4 flex items-center text-xs text-[var(--muted)]">
           <span>© 2026 与航</span>
-          <div className="footer-line h-px flex-1 bg-[var(--line)] opacity-60" aria-hidden="true" />
         </div>
       </footer>
     </main>

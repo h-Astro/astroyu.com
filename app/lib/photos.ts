@@ -89,6 +89,7 @@ export async function getRecentPhotos(shareUrl: string, limit = 3): Promise<Phot
       isImage?: boolean[];
       isTrashed?: boolean[];
       fileCreatedAt?: string[];
+      city?: (string | null)[];
     }>(
       `${meta.origin}/api/timeline/bucket?albumId=${encodeURIComponent(meta.albumId)}&timeBucket=${encodeURIComponent(bucket.timeBucket)}&key=${encodeURIComponent(meta.key)}`,
     );
@@ -97,12 +98,14 @@ export async function getRecentPhotos(shareUrl: string, limit = 3): Promise<Phot
     for (let i = 0; i < data.id.length && items.length < limit; i++) {
       const id = data.id[i];
       if (!id || data.isImage?.[i] === false || data.isTrashed?.[i] === true) continue;
-      const dateText = formatPhotoDate(data.fileCreatedAt?.[i]);
+      const dateText = formatPhotoDate(data.fileCreatedAt?.[i]) || bucket.timeBucket.replace(/-/g, ".");
+      const city = data.city?.[i]?.trim();
+      const label = city ? `${city} · ${dateText}` : dateText;
       items.push({
         id,
         src: `/api/photos/${id}`,
-        alt: dateText ? `与航的近影 · ${dateText}` : "与航的近影",
-        meta: dateText || bucket.timeBucket.replace(/-/g, "."),
+        alt: label ? `与航的近影 · ${label}` : "与航的近影",
+        meta: label,
       });
     }
   }
