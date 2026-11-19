@@ -23,7 +23,6 @@ export default function Postcard() {
     <div className="postcard-stage">
       <button className="postcard-button" type="button" onClick={() => setExpanded(true)} aria-label="放大查看天坛明信片" aria-haspopup="dialog">
         <span className="postcard-image"><img src="/hero-yuhang-temple.jpg" alt="与航和朋友在天坛的手绘旅行画" width={1086} height={1448} fetchPriority="high" decoding="async" /></span>
-        <span className="postcard-cutout" aria-hidden="true" />
         <span className="image-expand" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.4"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" /></svg></span>
       </button>
       <svg className="postmark" viewBox="0 0 120 120" aria-hidden="true">

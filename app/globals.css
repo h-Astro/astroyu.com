@@ -23,8 +23,21 @@
   --muted: #5e6979;
   --line: rgba(31, 49, 80, .15);
   --accent: #2853b8;
-  --postmark-ink: #bd4b35;
+  --postmark-ink: #b8533f;
   --soft: #eef2f9;
+  --hero-bg:
+    radial-gradient(ellipse 68% 76% at 12% 88%, rgba(249, 242, 228, .92), transparent 64%),
+    radial-gradient(ellipse 62% 72% at 88% 14%, rgba(214, 238, 230, .68), transparent 62%),
+    linear-gradient(132deg, #eaf5f1 0%, #f5f7f2 46%, #faf6ee 100%);
+  --hero-border: rgba(46, 72, 66, .08);
+  --hero-ink: #243330;
+  --hero-muted: #5c6d68;
+  --hero-accent: #2c5b55;
+  --hero-line: rgba(36, 51, 48, .14);
+  --hero-wash: rgba(202, 232, 223, .42);
+  --hero-art-border: rgba(255, 252, 246, .85);
+  --hero-art-paper: #f7f3ea;
+  --postmark-bg: rgba(247, 246, 240, .58);
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --song: "Songti SC", "Astroyu Serif", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", serif;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -33,24 +46,49 @@
   color-scheme: dark;
   --bg: #151923;
   --accent: #9db7ff;
-  --postmark-ink: #ff947a;
+  --postmark-ink: #e89680;
   --paper: #202838;
   --ink: #eef2fa;
   --muted: #aab5c6;
   --line: rgba(230, 237, 252, .17);
   --soft: #202634;
+  --hero-bg:
+    radial-gradient(ellipse 68% 76% at 12% 88%, rgba(58, 52, 43, .44), transparent 64%),
+    radial-gradient(ellipse 62% 72% at 88% 14%, rgba(36, 62, 58, .55), transparent 62%),
+    linear-gradient(132deg, #192424 0%, #1c2226 48%, #23211e 100%);
+  --hero-border: rgba(226, 236, 232, .08);
+  --hero-ink: #eef2ef;
+  --hero-muted: #a8b5b0;
+  --hero-accent: #9dd1c4;
+  --hero-line: rgba(238, 242, 239, .15);
+  --hero-wash: rgba(114, 168, 156, .16);
+  --hero-art-border: rgba(255, 248, 238, .12);
+  --hero-art-paper: #262522;
+  --postmark-bg: rgba(26, 34, 34, .62);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --bg: #151923;
     --accent: #9db7ff;
-    --postmark-ink: #ff947a;
+    --postmark-ink: #e89680;
     --paper: #202838;
     --ink: #eef2fa;
     --muted: #aab5c6;
     --line: rgba(230, 237, 252, .17);
     --soft: #202634;
+    --hero-bg:
+      radial-gradient(ellipse 68% 76% at 12% 88%, rgba(58, 52, 43, .44), transparent 64%),
+      radial-gradient(ellipse 62% 72% at 88% 14%, rgba(36, 62, 58, .55), transparent 62%),
+      linear-gradient(132deg, #192424 0%, #1c2226 48%, #23211e 100%);
+    --hero-border: rgba(226, 236, 232, .08);
+    --hero-ink: #eef2ef;
+    --hero-muted: #a8b5b0;
+    --hero-accent: #9dd1c4;
+    --hero-line: rgba(238, 242, 239, .15);
+    --hero-wash: rgba(114, 168, 156, .16);
+    --hero-art-border: rgba(255, 248, 238, .12);
+    --hero-art-paper: #262522;
   }
 }
 * { box-sizing: border-box; }
@@ -226,12 +264,12 @@ img { display: block; max-width: 100%; height: auto; }
 
 
 /* Soft fields of color paired with sharp shapes and large type. */
-.intro, .footer-main {
+.footer-main {
   position: relative;
   isolation: isolate;
   overflow: hidden;
 }
-.intro::before, .footer-main::before {
+.footer-main::before {
   content: "";
   position: absolute;
   inset: 0 0 17% 18%;
@@ -239,7 +277,7 @@ img { display: block; max-width: 100%; height: auto; }
   background: #a4f2dcaa;
   pointer-events: none;
 }
-.intro::after, .footer-main::after {
+.footer-main::after {
   content: "";
   position: absolute;
   inset: 24% auto 47% 0;
@@ -251,53 +289,79 @@ img { display: block; max-width: 100%; height: auto; }
 
 .shell { width: min(1320px, calc(100% - 96px)); }
 .site-header { height: 89px; }
+
+/* Unified wide hero canvas: warm-mint to light-ivory paper wash, bottom-left slogan, right illustration. */
 .hero {
-  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
-  align-items: stretch;
-  gap: 20px;
-  padding-top: 24px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(290px, 420px);
+  align-items: end;
+  column-gap: clamp(32px, 5vw, 80px);
+  row-gap: 0;
+  min-height: clamp(500px, 44vw, 620px);
+  margin-top: 24px;
+  padding: clamp(32px, 4.4vw, 62px) clamp(28px, 4.8vw, 68px);
+  border-radius: 10px;
+  border: 1px solid var(--hero-border);
+  background: var(--hero-bg);
 }
 .intro {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
+  align-self: end;
   min-width: 0;
-  padding: clamp(26px, 4.6vw, 72px);
-  border-radius: 5px;
-  overflow: hidden;
-  color: #143331;
-  background:
-    radial-gradient(ellipse at 0% 93%, #c6eb4f, transparent 55%),
-    radial-gradient(ellipse at 92% 100%, #69dce8, transparent 51%),
-    linear-gradient(135deg, #a6ddff, #bdf3d8 66%, #b2e66f);
+  padding: 0 0 6px;
+  margin: 0;
+  border-radius: 0;
+  overflow: visible;
+  color: var(--hero-ink);
+  background: none;
   font-family: var(--sans);
-  gap: clamp(32px, 7vw, 108px);
+  gap: 24px;
 }
 .intro-first, .intro-second { position: static; align-self: auto; margin: 0; padding: 0; border: 0; animation: none; }
 .intro-first::before { display: none; }
-.intro-first > .intro-opening, .intro-second-opening {
-  font-size: clamp(16px, 2vw, 29px);
-  font-weight: 550;
-  letter-spacing: 0;
-  color: inherit;
-  margin-bottom: 16px;
+.intro .intro-first > .intro-opening, .intro .intro-second-opening {
+  display: block;
+  font-size: clamp(14px, 1.25vw, 17px);
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: var(--hero-muted);
+  margin-bottom: 10px;
 }
 .intro-main {
-  font-size: clamp(30px, 5vw, 76px);
-  font-weight: 750;
-  line-height: 1.11;
-  letter-spacing: -.065em;
+  display: block;
+  font-size: clamp(24px, 2.75vw, 39px);
+  font-weight: 650;
+  line-height: 1.38;
+  letter-spacing: -.025em;
+  color: var(--hero-ink);
 }
 .scenery-word {
-  display: block;
-  color: inherit;
-  font-size: 1.78em;
-  line-height: 1.05;
-  letter-spacing: -.1em;
-  margin-top: .06em;
+  display: inline;
+  color: var(--hero-accent);
+  font-size: 1em;
+  line-height: inherit;
+  letter-spacing: inherit;
+  margin-top: 0;
 }
-.intro-second { border-top: 1px solid #14333155; padding-top: 20px; }
-.intro-second-message { font-size: clamp(17px, 2.15vw, 33px); line-height: 1.36; font-weight: 650; letter-spacing: -.04em; }
+.intro-second {
+  border-top: 1px solid var(--hero-line);
+  padding-top: 18px;
+  max-width: 30em;
+}
+.intro-second-opening { margin-bottom: 6px; font-size: clamp(13px, 1.05vw, 15px); }
+.intro-second-message {
+  display: block;
+  font-size: clamp(15px, 1.35vw, 19px);
+  line-height: 1.65;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  color: var(--hero-ink);
+}
 
 .postcard {
   display: flex;
@@ -305,76 +369,100 @@ img { display: block; max-width: 100%; height: auto; }
   grid-column: 2;
   grid-row: 1;
   width: 100%;
-  max-width: none;
-  height: 100%;
+  max-width: 420px;
+  justify-self: end;
+  align-self: center;
+  height: auto;
   margin: 0;
   padding: 0;
   animation: none;
-  border-radius: 5px;
-  overflow: hidden;
-  background: #a7f1e2;
-  color: #162e32;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  color: var(--hero-ink);
 }
-.postcard-stage { flex: 1; min-height: 320px; transform: none; background: linear-gradient(145deg, #9decff, #a4f1ce 54%, #b4e64d); }
+.postcard-stage {
+  position: relative;
+  flex: none;
+  min-height: 0;
+  transform: none;
+  background: transparent;
+}
+/* Soft translucent paper tint extending outward past the illustration margin, never covering the art. */
+.postcard-stage::before {
+  content: "";
+  position: absolute;
+  inset: -14px -16px 28% 26%;
+  z-index: -1;
+  border-radius: 8px;
+  background: var(--hero-wash);
+  pointer-events: none;
+}
 .postcard-stage:hover, .postcard-stage:focus-within { transform: none; }
 .postcard-button {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  display: block;
+  width: 100%;
   overflow: hidden;
   padding: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
+  border: 1px solid var(--hero-art-border);
+  border-radius: 6px;
+  background: var(--hero-art-paper);
+  box-shadow: 0 14px 36px -20px rgba(66, 56, 40, .24), 0 2px 8px -2px rgba(66, 56, 40, .08);
+  transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s cubic-bezier(.2,.7,.2,1);
 }
-.postcard-image { position: absolute; inset: 0 0 0 18%; }
-.postcard-image img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 59%; filter: saturate(.77) contrast(.95); }
-.postcard-image::after {
-  content: "";
+.postcard-button:hover, .postcard-button:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 44px -20px rgba(66, 56, 40, .3), 0 4px 12px -2px rgba(66, 56, 40, .1);
+}
+.postcard-image { position: static; display: block; overflow: hidden; }
+.postcard-image img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center;
+  filter: none;
+}
+.postmark {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(150deg, #80f2df77, transparent 49%, #027d9238);
-  mix-blend-mode: multiply;
+  top: -28px;
+  left: -38px;
+  z-index: 2;
+  width: clamp(84px, 8.2vw, 114px);
+  height: auto;
+  border-radius: 50%;
+  background: var(--postmark-bg);
+  backdrop-filter: blur(2px);
+  transform: rotate(-14deg);
+  color: var(--postmark-ink);
+  stroke: currentColor;
+  opacity: .9;
+  pointer-events: none;
 }
-.postcard-cutout {
-  position: absolute;
-  left: 0;
-  top: 22%;
-  width: 31%;
-  height: 31%;
-  background: #069af3c4;
+.postmark text { fill: var(--postmark-ink); }
+.image-expand {
+  bottom: 12px;
+  right: 12px;
+  background: rgba(36, 51, 48, .48);
+  backdrop-filter: blur(4px);
+  opacity: .72;
+  transform: none;
 }
-.postcard-cutout::before {
-  content: "";
-  position: absolute;
-  inset: -71% auto auto 0;
-  width: 47%;
-  height: 71%;
-  background: #a8f0e3;
-}
-.postcard-cutout::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 58%;
-  height: 115%;
-  background: radial-gradient(ellipse at top left, #e0ef61, #66dbd6 85%);
-}
-.postmark { top: 8px; left: 8px; width: clamp(65px, 9vw, 128px); height: auto; transform: rotate(-12deg); color: #183943; stroke: currentColor; opacity: .92; }
-.postmark text { fill: #183943; }
-.image-expand { bottom: 13px; right: 13px; opacity: 1; transform: none; }
+.postcard-button:hover .image-expand, .postcard-button:focus-visible .image-expand { opacity: 1; }
 .postcard figcaption {
   flex: none;
-  margin: 0;
-  padding: 16px 20px;
+  margin: 14px 2px 0;
+  padding: 0;
   border: 0;
-  background: #1261a7;
-  color: #fff;
-  font-family: var(--sans);
-  font-size: clamp(13px, 1.32vw, 18px);
-  font-weight: 600;
-  line-height: 1.6;
-  letter-spacing: 0;
+  background: transparent;
+  color: var(--hero-muted);
+  font-family: var(--song);
+  font-size: clamp(13px, 1.05vw, 14.5px);
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: .04em;
+  text-align: right;
 }
 .postcard figcaption span { display: inline; }
 
@@ -437,11 +525,23 @@ img { display: block; max-width: 100%; height: auto; }
 
 @media (max-width: 850px) {
   .shell { width: calc(100% - 36px); }
-  .hero { grid-template-columns: 1fr; gap: 13px; padding-top: 14px; }
-  .intro { grid-row: 1; gap: 28px; }
-  .intro-main { font-size: clamp(38px, 8vw, 72px); }
-  .postcard { grid-column: 1; grid-row: 2; }
-  .postcard-stage { min-height: clamp(330px, 100vw, 600px); }
+  .hero {
+    grid-template-columns: 1fr;
+    row-gap: 34px;
+    min-height: 0;
+    margin-top: 14px;
+    padding: 28px 22px 26px;
+  }
+  .intro { grid-row: 1; padding: 0; gap: 18px; }
+  .intro .intro-first > .intro-opening { font-size: 14px; margin-bottom: 8px; }
+  .intro-main { font-size: clamp(23px, 6.2vw, 32px); }
+  .intro-second { padding-top: 14px; }
+  .intro-second-message { font-size: clamp(14.5px, 3.9vw, 17px); }
+  .postcard { grid-column: 1; grid-row: 2; max-width: 360px; justify-self: center; }
+  .postcard-stage { min-height: 0; }
+  .postcard-stage::before { inset: -10px -10px 28% 24%; }
+  .postmark { top: -22px; left: -18px; width: 78px; }
+  .postcard figcaption { text-align: left; margin-top: 12px; }
   .image-expand { bottom: 12px; right: 12px; }
   .apps { gap: 24px 14px; }
   .stamp { aspect-ratio: 1.55; }
