@@ -34,11 +34,12 @@
     linear-gradient(180deg, #f3faf7 0%, #def0ea 22%, #e8f5f0 78%, #f5faf8 100%);
   --hero-ink: #0d1615;
   --hero-muted: #4b5e5a;
+  --hero-inscription: #374f4a;
   --hero-line: rgba(20, 38, 35, .14);
   --hero-tile-blue: rgba(164, 199, 245, .82);
-  --hero-tile-green: rgba(52, 178, 112, .68);
-  --hero-card-bg: rgba(242, 243, 240, .9);
-  --hero-card-line: rgba(20, 38, 35, .1);
+  --hero-tile-green: rgba(84, 176, 138, .20);
+  --hero-card-bg: rgba(247, 250, 248, .58);
+  --hero-card-line: rgba(24, 45, 41, .06);
   --hero-art-paper: #f6f2e9;
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --song: "Songti SC", "Astroyu Serif", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", serif;
@@ -63,11 +64,12 @@
     linear-gradient(180deg, #161d24 0%, #172727 25%, #182828 78%, #151923 100%);
   --hero-ink: #eef4f2;
   --hero-muted: #9eb2ae;
+  --hero-inscription: #b8c9c4;
   --hero-line: rgba(220, 236, 232, .16);
   --hero-tile-blue: rgba(74, 116, 178, .78);
-  --hero-tile-green: rgba(42, 148, 96, .64);
-  --hero-card-bg: rgba(28, 36, 38, .9);
-  --hero-card-line: rgba(220, 236, 232, .15);
+  --hero-tile-green: rgba(116, 198, 166, .20);
+  --hero-card-bg: rgba(24, 35, 34, .56);
+  --hero-card-line: rgba(220, 236, 232, .08);
   --hero-art-paper: #262522;
 }
 
@@ -90,11 +92,12 @@
       linear-gradient(180deg, #161d24 0%, #172727 25%, #182828 78%, #151923 100%);
     --hero-ink: #eef4f2;
     --hero-muted: #9eb2ae;
+    --hero-inscription: #b8c9c4;
     --hero-line: rgba(220, 236, 232, .16);
     --hero-tile-blue: rgba(74, 116, 178, .78);
-    --hero-tile-green: rgba(42, 148, 96, .64);
-    --hero-card-bg: rgba(28, 36, 38, .9);
-    --hero-card-line: rgba(220, 236, 232, .15);
+    --hero-tile-green: rgba(116, 198, 166, .20);
+    --hero-card-bg: rgba(24, 35, 34, .56);
+    --hero-card-line: rgba(220, 236, 232, .08);
     --hero-art-paper: #262522;
   }
 }
@@ -133,6 +136,8 @@ img { display: block; max-width: 100%; height: auto; }
 .postmark .postmark-ring { font-size: 8px; letter-spacing: 0; }
 .postmark .postmark-day { font-size: 13px; font-weight: 700; letter-spacing: .5px; }
 .postmark .postmark-year { font-family: var(--song); font-size: 10px; letter-spacing: 2px; }
+
+.postcard-card { font-family: var(--song); }
 
 /* App stamp artwork layers */
 .stamp-art::after {

@@ -19,7 +19,7 @@ export default function Postcard() {
   }, [expanded]);
 
   return (
-    <figure className="postcard relative mx-auto my-auto w-full max-w-[600px] py-3 pr-2 pl-7 sm:pt-8 sm:pr-16 sm:pb-20 sm:pl-20 lg:mr-0 lg:ml-auto">
+    <figure className="postcard relative mx-auto my-auto w-full max-w-[600px] py-3 pr-2 pl-7 sm:pt-8 sm:pr-16 sm:pb-24 sm:pl-20 lg:mr-0 lg:ml-auto">
       <div className="postcard-stage relative mx-auto w-full max-w-[392px]">
         <span
           aria-hidden="true"
@@ -52,7 +52,7 @@ export default function Postcard() {
             </svg>
           </span>
         </button>
-        <div className="pointer-events-none absolute top-[18%] -left-7 z-20 grid size-[clamp(96px,10.6vw,142px)] place-items-center bg-[var(--hero-tile-blue)] p-2.5 backdrop-blur-[4px] sm:-left-22 sm:p-3">
+        <div className="pointer-events-none absolute top-[18%] -left-7 z-20 grid size-[clamp(96px,10.2vw,132px)] -rotate-12 place-items-center sm:-left-18">
           <svg className="postmark" viewBox="0 0 120 120" aria-hidden="true">
             <defs><path id="postmark-ring" d="M60 60 m-40 0 a40 40 0 1 1 80 0 a40 40 0 1 1 -80 0" /></defs>
             <circle cx="60" cy="60" r="52" /><circle cx="60" cy="60" r="31" />
@@ -61,9 +61,9 @@ export default function Postcard() {
             <text className="postmark-year" x="60" y="72" textAnchor="middle">天坛</text>
           </svg>
         </div>
-        <figcaption className="postcard-card relative z-20 mt-3 ml-auto w-[min(100%,292px)] border border-[var(--hero-card-line)] bg-[var(--hero-card-bg)] px-4 py-3 font-sans text-[13px] leading-[1.6] text-[var(--hero-ink)] backdrop-blur-md sm:absolute sm:-right-14 sm:-bottom-10 sm:mt-0 sm:w-[clamp(236px,21vw,288px)] sm:px-5 sm:py-3.5">
-          <span className="block font-medium">天地这么大，</span>
-          <span className="block text-[var(--hero-muted)]">我们恰好在这一刻并肩而立。</span>
+        <figcaption className="postcard-card relative z-20 mt-3 ml-auto w-[min(100%,292px)] rounded-[4px] border border-[var(--hero-card-line)] bg-[var(--hero-card-bg)] px-4 py-3 text-[14.5px] leading-[1.9] font-normal tracking-[0.04em] text-[var(--hero-inscription)] backdrop-blur-sm sm:absolute sm:-right-16 sm:-bottom-16 sm:mt-0 sm:w-[clamp(248px,22vw,304px)] sm:px-5 sm:py-3.5 sm:text-[15px]">
+          <span className="block">天地这么大，</span>
+          <span className="block">我们恰好在这一刻并肩而立。</span>
         </figcaption>
       </div>
       <dialog

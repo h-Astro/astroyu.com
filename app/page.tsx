@@ -32,7 +32,7 @@ export default function Home() {
       >
         <div className="mx-auto grid min-h-[clamp(540px,50vw,680px)] w-[min(1360px,calc(100%-36px))] grid-cols-1 items-center gap-y-10 py-9 sm:w-[min(1360px,calc(100%-88px))] sm:py-[clamp(44px,5.2vw,72px)] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-x-12">
           <h1
-            className="intro m-0 flex min-w-0 flex-col justify-center gap-6 font-sans text-[var(--hero-ink)] sm:gap-7 lg:pt-14"
+            className="intro m-0 flex min-w-0 flex-col justify-center gap-6 font-sans text-[var(--hero-ink)] sm:gap-7 lg:pb-14"
             id="hero-title"
           >
             <span className="intro-first block">
