@@ -16,7 +16,7 @@ const apps = [
 
 export default async function Home() {
   const shareUrl = getPhotosShareUrl();
-  const recentPhotos = await getRecentPhotos(shareUrl, 3);
+  const recentPhotos = await getRecentPhotos(shareUrl, 12);
   return (
     <main className="page overflow-x-clip" id="top">
       <header className="site-header shell mx-auto flex h-[76px] w-[min(1360px,calc(100%-36px))] items-center justify-between sm:h-[84px] sm:w-[min(1360px,calc(100%-88px))]">
@@ -97,22 +97,14 @@ export default async function Home() {
 
       {recentPhotos.length > 0 && (
         <section
-          className="photos-section shell mx-auto w-[min(1360px,calc(100%-36px))] pt-[clamp(56px,7vw,92px)] pb-0 sm:w-[min(1360px,calc(100%-88px))]"
+          className="photos-section w-full pt-[clamp(56px,7vw,92px)] pb-0"
           id="photos"
           aria-labelledby="photos-title"
         >
-          <div className="section-heading mb-6 flex items-baseline justify-between gap-4 sm:mb-8">
+          <div className="section-heading mx-auto mb-6 w-[min(1360px,calc(100%-36px))] sm:mb-8 sm:w-[min(1360px,calc(100%-88px))]">
             <h2 id="photos-title" className="m-0 font-sans text-[clamp(22px,2.2vw,30px)] leading-tight font-semibold tracking-[-0.03em] text-[var(--ink)]">
               近影
             </h2>
-            <a
-              className="text-[13px] font-medium text-[var(--muted)] transition-colors hover:text-[var(--accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
-              href={shareUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              全部照片 →
-            </a>
           </div>
           <PhotosStrip photos={recentPhotos} />
         </section>

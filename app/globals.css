@@ -177,9 +177,19 @@ body::before {
 }
 .app-videos i:first-child { width: 43%; height: 100%; left: 18%; top: 26%; background: #8451dc90; clip-path: polygon(0 48%, 100% 0, 100% 100%); }
 
+@keyframes photos-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.photos-marquee:hover .photos-grid,
+.photos-marquee:focus-within .photos-grid {
+  animation-play-state: paused !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  .photos-marquee { overflow-x: auto; }
 }
 
 .hero-frame {
