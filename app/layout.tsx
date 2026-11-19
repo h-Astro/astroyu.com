@@ -50,7 +50,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body>{children}</body>
+      <body className="m-0 bg-[var(--bg)] font-sans text-base leading-[1.7] text-[var(--ink)] antialiased selection:bg-[var(--accent)] selection:text-[var(--paper)]">
+        {children}
+      </body>
     </html>
   );
 }
